@@ -4,3 +4,5 @@ WORKDIR /go/src/github.com/b4fun/counter
 COPY . .
 
 CMD go run ./cmd/*.go
+
+EXPOSE 8081
