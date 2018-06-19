@@ -9,6 +9,7 @@ spec:
   selector:
     app: counter
     version: basic
+  type: NodePort
   ports:
     - protocol: TCP
       port: 80
