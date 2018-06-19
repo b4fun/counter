@@ -8,6 +8,7 @@ A counter app for learning [k8s][].
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/b4fun/counter.svg)](https://hub.docker.com/r/b4fun/counter/)
 
+- 2018061902
 - 2018061901
 
 ## LICENSE
