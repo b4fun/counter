@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-service
+  labels:
+    app: counter
+    version: basic
+spec:
+  selector:
+    app: counter
+    version: basic
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081

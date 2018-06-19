@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-deployment
+  labels:
+    app: counter
+    version: basic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter
+  template:
+    metadata:
+      labels:
+        app: counter
+        version: basic
+    spec:
+      containers:
+        - name: counter
+          image: b4fun/counter:2018061902
+          ports:
+            - containerPort: 8081
