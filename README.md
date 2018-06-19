@@ -4,6 +4,11 @@ A counter app for learning [k8s][].
 
 [k8s]: http://kubernetes.io/
 
+## Docker images
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/b4fun/counter.svg)](https://hub.docker.com/r/b4fun/counter/)
+
+- 2018061901
 
 ## LICENSE
 
