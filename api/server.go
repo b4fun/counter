@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/b4fun/counter"
+	"github.com/sirupsen/logrus"
+	"github.com/urfave/negroni"
 )
 
 type NewServerOpt struct {
@@ -12,11 +14,17 @@ type NewServerOpt struct {
 
 // NewServer creates a api server.
 func NewServer(opt NewServerOpt) http.Handler {
-	server := http.NewServeMux()
-
+	mux := http.NewServeMux()
 	for namespace, impl := range opt.Counters {
-		BindCounterHandler(server, namespace, impl)
+		BindCounterHandler(mux, namespace, impl)
 	}
 
-	return server
+	httpLogger := negroni.NewLogger()
+	httpLogger.ALogger = logrus.StandardLogger()
+
+	n := negroni.New()
+	n.Use(httpLogger)
+	n.UseHandler(mux)
+
+	return n
 }
