@@ -30,10 +30,14 @@ func (c *Counter) Get(ctx context.Context, id string) (int64, error) {
 	defer conn.Close()
 
 	count, err := redis.Int64(conn.Do("GET", c.idKey(id)))
-	if err != nil {
+	switch err {
+	case nil:
+		return count, nil
+	case redis.ErrNil:
+		return 0, nil
+	default:
 		return 0, err
 	}
-	return count, nil
 }
 
 func (c *Counter) Incr(ctx context.Context, id string) error {
