@@ -2,6 +2,15 @@
 
 
 [[projects]]
+  name = "github.com/gomodule/redigo"
+  packages = [
+    "internal",
+    "redis"
+  ]
+  revision = "9c11da706d9b7902c6da69c592f75637793fe121"
+  version = "v2.0.0"
+
+[[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   revision = "418b41d23a1bf978c06faea5313ba194650ac088"
@@ -16,6 +25,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6832698f387003424867524b620f235120cb0f27e668eaaf86a632edee9ac20c"
+  inputs-digest = "c1f0cde321fa39d692faa323ee817ab541dff4d08f1668d1d91bb99cfb70195e"
   solver-name = "gps-cdcl"
   solver-version = 1
