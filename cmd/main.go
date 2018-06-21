@@ -24,8 +24,8 @@ func main() {
 			MaxIdle:     3,
 			IdleTimeout: 10 * time.Second,
 			Dial: func() (redis.Conn, error) {
-				// FIXME get host from env var
-				return redis.Dial("tcp", "localhost:6379")
+				// FIXME support get host from env var
+				return redis.Dial("tcp", "counter-redis:6379")
 			},
 		}
 		redisCounter = credis.New(redisPool)
