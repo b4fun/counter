@@ -18,6 +18,6 @@ spec:
     spec:
       containers:
         - name: counter
-          image: b4fun/counter:2018062101
+          image: b4fun/counter:2018062103
           ports:
             - containerPort: 8081
