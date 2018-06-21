@@ -3,18 +3,38 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/b4fun/counter"
 	"github.com/b4fun/counter/api"
 	"github.com/b4fun/counter/inmem"
+	credis "github.com/b4fun/counter/redis"
+	"github.com/gomodule/redigo/redis"
 )
 
 func main() {
-	inmemCounter := inmem.New()
+	var inmemCounter counter.Counter
+	{
+		inmemCounter = inmem.New()
+	}
+
+	var redisCounter counter.Counter
+	{
+		redisPool := &redis.Pool{
+			MaxIdle:     3,
+			IdleTimeout: 10 * time.Second,
+			Dial: func() (redis.Conn, error) {
+				// FIXME get host from env var
+				return redis.Dial("tcp", "localhost:6379")
+			},
+		}
+		redisCounter = credis.New(redisPool)
+	}
 
 	apiServer := api.NewServer(api.NewServerOpt{
 		Counters: map[string]counter.Counter{
 			"inmem": inmemCounter,
+			"redis": redisCounter,
 		},
 	})
 
