@@ -6,6 +6,8 @@ A counter app for learning [k8s][].
 
 ## Docker images
 
+### `b4fun/counter`
+
 [![Docker Pulls](https://img.shields.io/docker/pulls/b4fun/counter.svg)](https://hub.docker.com/r/b4fun/counter/)
 
 - 2018062103
@@ -14,6 +16,12 @@ A counter app for learning [k8s][].
 - 2018062001
 - 2018061902
 - 2018061901
+
+### `b4fun/counter-redis-slave`
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/b4fun/counter-redis-slave.svg)](https://hub.docker.com/r/b4fun/counter-redis-slave/)
+
+- 2018062202
 
 ## LICENSE
 
