@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-deployment
+  labels:
+    app: counter
+    version: redis-cluster
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: counter
+  template:
+    metadata:
+      labels:
+        app: counter
+        version: redis-cluster
+    spec:
+      containers:
+        - name: counter
+          image: b4fun/counter:2018062103
+          ports:
+            - containerPort: 8081
