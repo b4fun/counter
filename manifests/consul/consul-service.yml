@@ -9,7 +9,7 @@ spec:
   selector:
     app: consul
     version: consul
-  clusterIP: None
+  type: NodePort
   ports:
     - name: http
       port: 8500
