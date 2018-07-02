@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul-node
+  labels:
+    app: consul
+    version: consul
+spec:
+  selector:
+    matchLabels:
+      app: consul
+      version: consul
+  serviceName: consul-service
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: consul
+        version: consul
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - consoul
+              topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 1000
+      subdomain: consul-node
+      containers:
+        - name: consul
+          image: consul:1.2.0
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: GOSSIP_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul
+                  key: gossip-encryption-key
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          args:
+            - "agent"
+            - "-advertise=$(POD_IP)"
+            - "-bind=0.0.0.0"
+            - "-bootstrap-expect=3"
+            - "-retry-join=consul-node-0.consul-service.$(NAMESPACE).svc.cluster.local"
+            - "-retry-join=consul-node-1.consul-service.$(NAMESPACE).svc.cluster.local"
+            - "-retry-join=consul-node-2.consul-service.$(NAMESPACE).svc.cluster.local"
+            - "-client=0.0.0.0"
+            - "-config-file=/consul/consul_config/consul-configs.json"
+            - "-datacenter=dc1"
+            - "-data-dir=/consul/data"
+            - "-domain=cluster.local"
+            - "-encrypt=$(GOSSIP_ENCRYPTION_KEY)"
+            - "-server"
+            - "-ui"
+            - "-disable-host-node-id"
+          volumeMounts:
+            - name: data
+              mountPath: /consul/data
+            - name: config
+              mountPath: /consul/consul_config
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - consul leave
+          ports:
+            - containerPort: 8500
+              name: ui-port
+            - containerPort: 8400
+              name: alt-port
+            - containerPort: 53
+              name: udp-port
+            - containerPort: 8080
+              name: http-port
+            - containerPort: 8301
+              name: serflan
+            - containerPort: 8302
+              name: serfwan
+            - containerPort: 8600
+              name: consuldns
+            - containerPort: 8300
+              name: server
+      volumes:
+        - name: config
+          configMap:
+            name: consul
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
