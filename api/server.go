@@ -19,6 +19,8 @@ func NewServer(opt NewServerOpt) http.Handler {
 		BindCounterHandler(mux, namespace, impl)
 	}
 
+	mux.HandleFunc("/_health/consul", HandleConsulHealthCheck)
+
 	httpLogger := negroni.NewLogger()
 	httpLogger.ALogger = logrus.StandardLogger()
 
